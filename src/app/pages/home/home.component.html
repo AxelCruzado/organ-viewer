@@ -1,0 +1,30 @@
+<div class="relative w-full h-[500px] bg-cover bg-center flex items-center justify-center text-white" style="background-image: url('https://source.unsplash.com/1600x900/?health,medicine');">
+    <div class="text-center bg-black bg-opacity-50 p-6 rounded-lg">
+      <h1 class="text-4xl font-bold">Bienvenido a Organ Viewer</h1>
+      <p class="mt-2 text-lg">Explora los órganos humanos y su funcionamiento</p>
+    </div>
+  </div>
+  
+  <!-- Sección de Categorías -->
+  <div class="container mx-auto mt-10 px-4">
+    <h2 class="text-2xl font-semibold mb-4">Categorías</h2>
+    <div class="flex gap-4 overflow-x-auto pb-2">
+      <button *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria.id)"
+        class="px-6 py-2 rounded-lg border border-gray-300 bg-white hover:bg-blue-500 hover:text-white transition">
+        {{ categoria.nombre }}
+      </button>
+    </div>
+  </div>
+  
+  <!-- Sección de Órganos -->
+  <div class="container mx-auto mt-8 px-4">
+    <h2 class="text-2xl font-semibold mb-4">Órganos</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div *ngFor="let organo of organosFiltrados" class="border p-4 rounded-lg shadow-lg bg-white">
+        <img [src]="organo.imagen" alt="{{ organo.nombre }}" class="w-full h-40 object-cover rounded">
+        <h3 class="text-lg font-bold mt-3">{{ organo.nombre }}</h3>
+        <p class="text-sm text-gray-600 mt-1">{{ organo.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+  
