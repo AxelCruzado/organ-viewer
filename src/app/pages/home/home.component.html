@@ -1,30 +1,64 @@
-<div class="relative w-full h-[500px] bg-cover bg-center flex items-center justify-center text-white" style="background-image: url('https://source.unsplash.com/1600x900/?health,medicine');">
-    <div class="text-center bg-black bg-opacity-50 p-6 rounded-lg">
-      <h1 class="text-4xl font-bold">Bienvenido a Organ Viewer</h1>
-      <p class="mt-2 text-lg">Explora los órganos humanos y su funcionamiento</p>
+<!-- Sección de bienvenida con imagen de fondo -->
+<div class="relative w-full h-[500px] bg-mint-300 bg-center flex items-center justify-center text-white" style="background-image: url('https://source.unsplash.com/1600x900/?health,medicine');">
+  <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+  <div class="relative text-center p-6">
+    <h1 class="text-5xl text-mint-50 font-extrabold leading-tight tracking-tight">Bienvenido a Organ Viewer</h1>
+    <p class="mt-3 text-mint-50 md:text-xl">Explora los órganos humanos y su funcionamiento, ¡descubre más sobre el cuerpo humano!</p>
+  </div>
+</div>
+
+<!-- Sección de Categorías -->
+<div class="container mx-auto mt-12 px-4">
+  <h2 class="text-3xl font-semibold text-center mb-8">Categorías</h2>
+  <div class="flex gap-4 overflow-x-auto pb-2 justify-center">
+    <button *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria.id)"
+      class="px-6 py-3 rounded-lg border border-gray-300 bg-white hover:bg-blue-500 hover:text-white transition duration-300 ease-in-out">
+      {{ categoria.nombre }}
+    </button>
+  </div>
+</div>
+
+<!-- Sección de Órganos -->
+<div class="container mx-auto mt-10 px-4 ">
+  <h2 class="text-3xl font-semibold text-center mb-6">Órganos</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div *ngFor="let organo of organosFiltrados" class="border p-6 rounded-lg shadow-lg bg-white hover:shadow-xl transition duration-300 ease-in-out">
+      <img [src]="organo.imagen" alt="{{ organo.nombre }}" class="w-full h-40 object-cover rounded-t-lg">
+      <h3 class="text-lg font-bold mt-4">{{ organo.nombre }}</h3>
+      <p class="text-sm text-gray-600 mt-2">{{ organo.descripcion }}</p>
     </div>
   </div>
-  
-  <!-- Sección de Categorías -->
-  <div class="container mx-auto mt-10 px-4">
-    <h2 class="text-2xl font-semibold mb-4">Categorías</h2>
-    <div class="flex gap-4 overflow-x-auto pb-2">
-      <button *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria.id)"
-        class="px-6 py-2 rounded-lg border border-gray-300 bg-white hover:bg-blue-500 hover:text-white transition">
-        {{ categoria.nombre }}
-      </button>
+</div>
+
+<!-- Sección de Información del Proyecto -->
+<div class="container mx-auto mt-12 px-4 bg-gray-50 py-8 rounded-lg shadow-md">
+  <h2 class="text-3xl font-semibold text-center mb-4">Sobre el Proyecto</h2>
+  <p class="text-lg text-center text-gray-700">Organ Viewer es una plataforma educativa diseñada para proporcionar información detallada sobre los órganos humanos y su funcionamiento. Nuestro objetivo es hacer el aprendizaje de la anatomía humana más accesible y visual.</p>
+</div>
+
+<!-- Sección de Integrantes del Equipo -->
+<div class="container mx-auto mt-12 px-4">
+  <h2 class="text-3xl font-semibold text-center mb-8">Nuestro Equipo</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <div class="text-center">
+      <img src="https://via.placeholder.com/150" alt="Integrante 1" class="w-32 h-32 object-cover rounded-full mx-auto mb-4">
+      <h3 class="text-xl font-semibold">Rojas Rojas Leonardo</h3>
+      <p class="text-sm text-gray-600">Desarrollador Frontend</p>
+    </div>
+    <div class="text-center">
+      <img src="https://via.placeholder.com/150" alt="Integrante 2" class="w-32 h-32 object-cover rounded-full mx-auto mb-4">
+      <h3 class="text-xl font-semibold">Segura Venturo Williams</h3>
+      <p class="text-sm text-gray-600">Diseñador UI/UX</p>
+    </div>
+    <div class="text-center">
+      <img src="https://via.placeholder.com/150" alt="Integrante 3" class="w-32 h-32 object-cover rounded-full mx-auto mb-4">
+      <h3 class="text-xl font-semibold">Cruzado Alegre Antony</h3>
+      <p class="text-sm text-gray-600">Desarrollador Backend</p>
+    </div>
+    <div class="text-center">
+      <img src="https://via.placeholder.com/150" alt="Integrante 4" class="w-32 h-32 object-cover rounded-full mx-auto mb-4">
+      <h3 class="text-xl font-semibold">Avalos Chong Sohell</h3>
+      <p class="text-sm text-gray-600">Gestora de Proyecto</p>
     </div>
   </div>
-  
-  <!-- Sección de Órganos -->
-  <div class="container mx-auto mt-8 px-4">
-    <h2 class="text-2xl font-semibold mb-4">Órganos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <div *ngFor="let organo of organosFiltrados" class="border p-4 rounded-lg shadow-lg bg-white">
-        <img [src]="organo.imagen" alt="{{ organo.nombre }}" class="w-full h-40 object-cover rounded">
-        <h3 class="text-lg font-bold mt-3">{{ organo.nombre }}</h3>
-        <p class="text-sm text-gray-600 mt-1">{{ organo.descripcion }}</p>
-      </div>
-    </div>
-  </div>
-  
+</div>
