@@ -4,82 +4,172 @@
     <h2 class="text-xl font-semibold text-gray-700 mb-4">Admin Panel</h2>
     <ul>
       <li class="mb-2">
-        <a
-          href="/dashboard/categorias"
-          class="block p-2 rounded bg-blue-500 text-white"
-          >Categorías</a
+        <button
+          (click)="activeSection = 'categorias'"
+          class="block w-full p-2 rounded bg-blue-500 text-white"
         >
+          Categorías
+        </button>
       </li>
       <li>
-        <button routerLink="/organos" class="btn btn-primary">Órganos</button>
+        <button
+          (click)="activeSection = 'organos'"
+          class="block w-full p-2 rounded bg-blue-500 text-white"
+        >
+          Órganos
+        </button>
       </li>
     </ul>
   </aside>
 
   <!-- Contenido principal -->
   <div class="flex-1 p-6">
-    <header class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Gestión de Categorías</h1>
-      <button
-        (click)="abrirModal()"
-        class="bg-blue-600 text-white p-2 rounded-lg"
-      >
-        Nueva Categoría
-      </button>
-    </header>
+    <!-- Sección de Categorías -->
+    <div *ngIf="activeSection === 'categorias'">
+      <header class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Gestión de Categorías</h1>
+        <button
+          (click)="abrirModalCategoria()"
+          class="bg-blue-600 text-white p-2 rounded-lg"
+        >
+          Nueva Categoría
+        </button>
+      </header>
 
-    <!-- Listado de Categorías -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div
-        class="bg-white p-4 rounded-lg shadow-md"
-        *ngFor="let categoria of categorias"
-      >
-        <h2 class="text-lg font-semibold">{{ categoria.nombre }}</h2>
-        <p class="text-gray-600">{{ categoria.descripcion }}</p>
-        <div class="flex mt-4 gap-2">
-          <button class="bg-blue-500 text-white px-3 py-1 rounded">
-            Editar
-          </button>
-          <button class="bg-red-500 text-white px-3 py-1 rounded">
-            Eliminar
-          </button>
+      <!-- Listado de Categorías -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          class="bg-white p-4 rounded-lg shadow-md"
+          *ngFor="let categoria of categorias"
+        >
+          <h2 class="text-lg font-semibold">{{ categoria.nombre }}</h2>
+          <p class="text-gray-600">{{ categoria.descripcion }}</p>
+          <div class="flex mt-4 gap-2">
+            <button class="bg-blue-500 text-white px-3 py-1 rounded">
+              Editar
+            </button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded">
+              Eliminar
+            </button>
+          </div>
         </div>
+        <div
+          *ngIf="categorias.length === 0"
+          class="col-span-3 text-center text-gray-600"
+        >
+          No hay categorías registradas.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Órganos -->
+    <div *ngIf="activeSection === 'organos'">
+      <header class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Gestión de Órganos</h1>
+      </header>
+
+      <!-- Listado de Categorías con sus Órganos -->
+      <div *ngFor="let categoria of categorias" class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">{{ categoria.nombre }}</h2>
+        <button
+          (click)="abrirModalOrgano(categoria.id!)"
+          class="bg-blue-600 text-white p-2 rounded-lg mb-4"
+        >
+          Nuevo Órgano
+        </button>
+
+        <!-- Listado de Órganos -->
+        <div *ngIf="organos[categoria.id!] && organos[categoria.id!].length > 0; else noOrganos">
+          <div
+            class="bg-white p-4 rounded-lg shadow-md mb-4"
+            *ngFor="let organo of organos[categoria.id!]"
+          >
+            <h3 class="text-lg font-semibold">{{ organo.nombre }}</h3>
+            <p class="text-gray-600">{{ organo.descripcion }}</p>
+          </div>
+        </div>
+        <ng-template #noOrganos>
+          <p class="text-gray-600">No hay órganos en esta categoría.</p>
+        </ng-template>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal para agregar categorías -->
 <div
-  *ngIf="showModal"
+  *ngIf="showModalCategoria"
   class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
 >
   <div class="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 class="text-xl font-semibold mb-4">Agregar Categoría</h2>
-
-    <label class="block text-sm font-medium">Nombre</label>
     <input
       [(ngModel)]="nombreCategoria"
       type="text"
       class="w-full border rounded-lg p-2 mb-2"
+      placeholder="Nombre"
     />
-
-    <label class="block text-sm font-medium">Descripción</label>
     <textarea
       [(ngModel)]="descripcionCategoria"
       class="w-full border rounded-lg p-2"
+      placeholder="Descripción"
     ></textarea>
-
     <div class="flex justify-end mt-4">
       <button
-        (click)="cerrarModal()"
+        (click)="cerrarModalCategoria()"
         class="mr-2 bg-gray-500 text-white px-3 py-2 rounded-lg"
       >
         Cancelar
       </button>
       <button
-        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
         (click)="agregarCategoria()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      >
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para agregar órganos -->
+<div
+  *ngIf="showModalOrgano"
+  class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h2 class="text-xl font-semibold mb-4">Agregar Órgano</h2>
+    <input
+      [(ngModel)]="nombreOrgano"
+      type="text"
+      class="w-full border rounded-lg p-2 mb-2"
+      placeholder="Nombre"
+    />
+    <textarea
+      [(ngModel)]="descripcionOrgano"
+      class="w-full border rounded-lg p-2 mb-2"
+      placeholder="Descripción"
+    ></textarea>
+    <input
+      type="file"
+      (change)="onFileChange($event, 'imagen')"
+      class="w-full border rounded-lg p-2 mb-2"
+      accept=".png, .jpg, .webp"
+    />
+    <input
+      type="file"
+      (change)="onFileChange($event, 'archivo')"
+      class="w-full border rounded-lg p-2 mb-2"
+    />
+    <div class="flex justify-end mt-4">
+      <button
+        (click)="cerrarModalOrgano()"
+        class="mr-2 bg-gray-500 text-white px-3 py-2 rounded-lg"
+      >
+        Cancelar
+      </button>
+      <button
+        (click)="agregarOrgano()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg"
       >
         Guardar
       </button>
