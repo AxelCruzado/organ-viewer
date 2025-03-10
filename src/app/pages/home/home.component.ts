@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-home',
+  standalone: true, // Lo haces standalone
+  imports: [CommonModule], // Ya no dará error
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

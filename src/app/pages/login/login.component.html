@@ -1,1 +1,23 @@
-<p>login works!</p>
+<div class="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div class="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg transform transition-all duration-500 hover:scale-105">
+      <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-6">Iniciar Sesión</h2>
+      
+      <form (submit)="onSubmit()" class="space-y-4">
+        <div>
+          <label for="email" class="block text-gray-700 dark:text-gray-300">Correo Electrónico</label>
+          <input type="email" id="email" [(ngModel)]="email" name="email" class="mt-1 w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring focus:ring-indigo-300" required>
+        </div>
+        
+        <div>
+          <label for="password" class="block text-gray-700 dark:text-gray-300">Contraseña</label>
+          <input type="password" id="password" [(ngModel)]="password" name="password" class="mt-1 w-full px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring focus:ring-indigo-300" required>
+        </div>
+        
+        <button type="submit" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition duration-300">
+          Ingresar
+        </button>
+        <p *ngIf="errorMessage" class="error-class">{{ errorMessage }}</p>
+      </form>
+    </div>
+  </div>
+  
