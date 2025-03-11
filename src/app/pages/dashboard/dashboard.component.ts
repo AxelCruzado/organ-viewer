@@ -5,6 +5,8 @@ import { Categoria } from '../../../models/categoria.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Para `ngModel`
 import { Organo } from '../../../models/organo.model';
+import { StorageService } from '../../services/storage.service'; // Importa el servicio
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -36,11 +38,9 @@ export class DashboardComponent implements OnInit {
   archivoOrgano: File | null = null;
   categoriaSeleccionada: string | null = null;
 
-  constructor(
-    private categoriesService: CategoriesService,
-    private organosService: OrganosService
-  ) {}
-
+  private categoriesService = inject(CategoriesService); // Usa inject()
+  private organosService = inject(OrganosService); // Usa inject()
+  private storageService = inject(StorageService);
   ngOnInit() {
     this.loadCategories(); // ✅ Llama correctamente a la función para cargar categorías
   }
@@ -122,25 +122,40 @@ export class DashboardComponent implements OnInit {
     if (
       !this.nombreOrgano ||
       !this.descripcionOrgano ||
-      !this.categoriaSeleccionada
-    )
+      !this.categoriaSeleccionada ||
+      !this.imagenOrgano || // Validar que la imagen no sea null
+      !this.archivoOrgano // Validar que el archivo no sea null
+    ) {
+      alert('Todos los campos son obligatorios, incluyendo la imagen y el archivo.');
       return;
-
-    const nuevoOrgano: Organo = {
-      id: '',
-      nombre: this.nombreOrgano,
-      descripcion: this.descripcionOrgano,
-      categoriaId: this.categoriaSeleccionada,
-      imagen: this.imagenOrgano || null,
-      archivo: this.archivoOrgano || null,
-    };
-
+    }
+  
     try {
+      // Subir la imagen y obtener su URL
+      const imagenPath = `organos/${new Date().getTime()}_${this.imagenOrgano.name}`;
+      const imagenUrl = await firstValueFrom(this.storageService.uploadFile(this.imagenOrgano, imagenPath));
+  
+      // Subir el archivo y obtener su URL
+      const archivoPath = `organos/${new Date().getTime()}_${this.archivoOrgano.name}`;
+      const archivoUrl = await firstValueFrom(this.storageService.uploadFile(this.archivoOrgano, archivoPath));
+  
+      // Crear el objeto Organo con las URLs
+      const nuevoOrgano: Organo = {
+        id: '', // Firestore asignará un ID automáticamente
+        nombre: this.nombreOrgano,
+        descripcion: this.descripcionOrgano,
+        imagen: imagenUrl, // Guardar la URL de la imagen
+        archivo: archivoUrl, // Guardar la URL del archivo
+        categoriaId: this.categoriaSeleccionada,
+      };
+  
+      // Guardar el órgano en Firestore
       await this.organosService.addOrgano(nuevoOrgano);
       this.loadOrganosByCategoria(this.categoriaSeleccionada); // Recargar órganos
       this.cerrarModalOrgano();
     } catch (error) {
       console.error('Error al agregar órgano:', error);
+      alert('Error al subir el archivo o guardar el órgano. Por favor, inténtalo de nuevo.');
     }
   }
 

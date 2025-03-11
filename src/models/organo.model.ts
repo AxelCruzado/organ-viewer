@@ -2,7 +2,7 @@ export interface Organo {
     id: string;
     nombre: string;
     descripcion: string;
-    imagen: File | null; // Permitir null
-    archivo: File | null; // Permitir null
+    imagen: string; // URL de la imagen
+    archivo: string; // URL del archivo
     categoriaId: string;
   }

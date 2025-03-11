@@ -1,35 +1,72 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CategoriesService } from '../../services/categories.service';
+import { OrganosService } from '../../services/organos.service';
+import { Categoria } from '../../../models/categoria.model';
+import { Organo } from '../../../models/organo.model';
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-home',
-  standalone: true, // Lo haces standalone
-  imports: [CommonModule], // Ya no dará error
+  standalone: true,
+  imports: [CommonModule, RouterModule], // Importa RouterModule para usar routerLink
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  categorias = [
-    { id: 'todos', nombre: 'Todos' },
-    { id: 'digestivo', nombre: 'Sistema Digestivo' },
-    { id: 'respiratorio', nombre: 'Sistema Respiratorio' },
-    { id: 'circulatorio', nombre: 'Sistema Circulatorio' }
-  ];
+  categorias: Categoria[] = [];
+  organos: Organo[] = [];
+  organosFiltrados: Organo[] = [];
+  categoriaSeleccionada: string = 'todos'; // Categoría seleccionada por defecto
+  constructor(
+    private categoriesService: CategoriesService,
+    private organosService: OrganosService
+  ) {}
 
-  organos = [
-    { nombre: 'Corazón', descripcion: 'Órgano principal del sistema circulatorio.', imagen: 'https://source.unsplash.com/300x200/?heart', categoria: 'circulatorio' },
-    { nombre: 'Pulmones', descripcion: 'Órgano del sistema respiratorio.', imagen: 'https://source.unsplash.com/300x200/?lungs', categoria: 'respiratorio' },
-    { nombre: 'Estómago', descripcion: 'Órgano del sistema digestivo.', imagen: 'https://source.unsplash.com/300x200/?stomach', categoria: 'digestivo' }
-  ];
+  ngOnInit(): void {
+    this.loadCategories();
+  }
 
-  organosFiltrados = [...this.organos];
+  private loadCategories() {
+    this.categoriesService.getCategories().subscribe({
+      next: (data) => {
+        this.categorias = data;
+        // Agrega la opción "Todos" al inicio de la lista de categorías
+        this.categorias.unshift({ id: 'todos', nombre: 'Todos', descripcion: 'Todas las categorías' });
+        this.loadOrganos(); // Carga todos los órganos por defecto
+      },
+      error: (error) => {
+        console.error('Error al cargar categorías:', error);
+      },
+    });
+  }
 
-  constructor() {}
+  private loadOrganos() {
+    this.organosService.getOrganosByCategoria('todos').subscribe({
+      next: (data) => {
+        this.organos = data;
+        this.organosFiltrados = [...this.organos]; // Muestra todos los órganos por defecto
+      },
+      error: (error) => {
+        console.error('Error al cargar órganos:', error);
+      },
+    });
+  }
 
-  ngOnInit(): void {}
+  filtrarPorCategoria(categoriaId: string) {
+    this.categoriaSeleccionada = categoriaId; // Actualiza la categoría seleccionada
 
-  filtrarPorCategoria(categoria: string) {
-    this.organosFiltrados = categoria === 'todos' 
-      ? [...this.organos] 
-      : this.organos.filter(organo => organo.categoria === categoria);
+    if (categoriaId === 'todos') {
+      this.organosFiltrados = [...this.organos]; // Muestra todos los órganos
+    } else {
+      this.organosService.getOrganosByCategoria(categoriaId).subscribe({
+        next: (data) => {
+          this.organosFiltrados = data; // Muestra los órganos de la categoría seleccionada
+        },
+        error: (error) => {
+          console.error('Error al filtrar órganos:', error);
+        },
+      });
+    }
   }
 }
