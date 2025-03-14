@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -6,6 +6,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { firebaseConfig } from './firebase.config';
 import { provideStorage, getStorage } from '@angular/fire/storage'; // Importa provideStorage y getStorage
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()), // Configura Storage
-    provideRouter(routes, withComponentInputBinding()) // 🔥 Agregar Router aquí
+    provideRouter(routes, withComponentInputBinding()), // 🔥 Agregar Router aquí
+    importProvidersFrom(ZXingScannerModule)
   ]
 };

@@ -1,8 +1,8 @@
 <nav class="p-4 bg-gray-900 text-white flex justify-between">
   <div class="flex items-center">
-    <a routerLink="/" class="mr-4">Inicio</a>
-    <a routerLink="/categorias" class="mr-4">Categorías</a>
-    <a routerLink="/organos" class="mr-4">Órganos</a>
+    <a routerLink="/" routerLinkActive="text-yellow-500" class="mr-4">Inicio</a>
+    <a routerLink="/dashboard" routerLinkActive="text-yellow-500" class="mr-4">Dashboard</a>
+
   </div>
   <div>
     <a *ngIf="!user" routerLink="/login" class="px-4 py-2 bg-blue-500 rounded">Ingresar</a>

@@ -7,7 +7,7 @@ import { Categoria } from '../../models/categoria.model';
   providedIn: 'root',
 })
 export class CategoriesService {
-  private firestore: Firestore = inject(Firestore); // ✅ Usa inject() para la inyección
+  private firestore = inject(Firestore);
   private categoriesRef = collection(this.firestore, 'categorias'); // ✅ Inicialización directa
 
   getCategories(): Observable<Categoria[]> {

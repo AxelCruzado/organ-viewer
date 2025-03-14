@@ -79,7 +79,12 @@
         </button>
 
         <!-- Listado de Órganos -->
-        <div *ngIf="organos[categoria.id!] && organos[categoria.id!].length > 0; else noOrganos">
+        <div
+          *ngIf="
+            organos[categoria.id!] && organos[categoria.id!].length > 0;
+            else noOrganos
+          "
+        >
           <div
             class="bg-white p-4 rounded-lg shadow-md mb-4"
             *ngFor="let organo of organos[categoria.id!]"
@@ -167,12 +172,17 @@
       >
         Cancelar
       </button>
-      <button
-        (click)="agregarOrgano()"
-        class="bg-blue-500 text-white px-4 py-2 rounded-lg"
-      >
-        Guardar
+      <button (click)="agregarOrgano()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Guardar</span>
+        <span *ngIf="isLoading">
+          <i class="fa fa-spinner fa-spin"></i> Guardando...
+        </span>
       </button>
+      <!-- Loader (puedes personalizarlo) -->
+      <div *ngIf="isLoading" class="loader-overlay">
+        <div class="loader"></div>
+        <p>Guardando órgano...</p>
+      </div>
     </div>
   </div>
 </div>

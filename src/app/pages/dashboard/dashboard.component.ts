@@ -38,6 +38,9 @@ export class DashboardComponent implements OnInit {
   archivoOrgano: File | null = null;
   categoriaSeleccionada: string | null = null;
 
+  // Variable para controlar el loader
+  isLoading: boolean = false;
+
   private categoriesService = inject(CategoriesService); // Usa inject()
   private organosService = inject(OrganosService); // Usa inject()
   private storageService = inject(StorageService);
@@ -126,19 +129,31 @@ export class DashboardComponent implements OnInit {
       !this.imagenOrgano || // Validar que la imagen no sea null
       !this.archivoOrgano // Validar que el archivo no sea null
     ) {
-      alert('Todos los campos son obligatorios, incluyendo la imagen y el archivo.');
+      alert(
+        'Todos los campos son obligatorios, incluyendo la imagen y el archivo.'
+      );
       return;
     }
-  
+
+    this.isLoading = true; // Activar el loader
+
     try {
       // Subir la imagen y obtener su URL
-      const imagenPath = `organos/${new Date().getTime()}_${this.imagenOrgano.name}`;
-      const imagenUrl = await firstValueFrom(this.storageService.uploadFile(this.imagenOrgano, imagenPath));
-  
+      const imagenPath = `organos/${new Date().getTime()}_${
+        this.imagenOrgano.name
+      }`;
+      const imagenUrl = await firstValueFrom(
+        this.storageService.uploadFile(this.imagenOrgano, imagenPath)
+      );
+
       // Subir el archivo y obtener su URL
-      const archivoPath = `organos/${new Date().getTime()}_${this.archivoOrgano.name}`;
-      const archivoUrl = await firstValueFrom(this.storageService.uploadFile(this.archivoOrgano, archivoPath));
-  
+      const archivoPath = `organos/${new Date().getTime()}_${
+        this.archivoOrgano.name
+      }`;
+      const archivoUrl = await firstValueFrom(
+        this.storageService.uploadFile(this.archivoOrgano, archivoPath)
+      );
+
       // Crear el objeto Organo con las URLs
       const nuevoOrgano: Organo = {
         id: '', // Firestore asignará un ID automáticamente
@@ -148,14 +163,18 @@ export class DashboardComponent implements OnInit {
         archivo: archivoUrl, // Guardar la URL del archivo
         categoriaId: this.categoriaSeleccionada,
       };
-  
+
       // Guardar el órgano en Firestore
       await this.organosService.addOrgano(nuevoOrgano);
       this.loadOrganosByCategoria(this.categoriaSeleccionada); // Recargar órganos
       this.cerrarModalOrgano();
     } catch (error) {
       console.error('Error al agregar órgano:', error);
-      alert('Error al subir el archivo o guardar el órgano. Por favor, inténtalo de nuevo.');
+      alert(
+        'Error al subir el archivo o guardar el órgano. Por favor, inténtalo de nuevo.'
+      );
+    } finally {
+      this.isLoading = false; // Desactivar el loader (se ejecuta siempre, haya éxito o error)
     }
   }
 

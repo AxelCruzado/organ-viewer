@@ -1,1 +1,30 @@
-<p>organo-detail works!</p>
+<!-- Navbar -->
+<nav class="navbar">
+  <a routerLink="/organos">Volver a la lista de órganos</a>
+</nav>
+
+<div *ngIf="organo">
+  <h2 class="text-2xl font-bold text-center mb-4">{{ organo.nombre }}</h2>
+  <p class="text-center text-gray-600">{{ organo.descripcion }}</p>
+</div>
+
+<a-scene embedded arjs="detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+  <!-- Marcador Hiro -->
+  <a-marker preset="hiro">
+    <!-- Modelo 3D -->
+    <a-entity
+      gltf-model="url(https://firebasestorage.googleapis.com/v0/b/productosoftware2.firebasestorage.app/o/organos%2F1741708361725_Corazon%20Humano.glb?alt=media&token=999d629d-a3c6-464d-9890-a952dcef185e)"
+      scale="17 17 17"
+      position="0 0 0"
+      rotation="0 180 0"
+    >
+    </a-entity>
+  </a-marker>
+
+  <!-- Cámara -->
+  <a-entity camera></a-entity>
+</a-scene>
+
+<div *ngIf="!modelUrl" class="mt-8 text-center text-gray-600">
+  Escanea el marcador Hiro para ver el modelo 3D.
+</div>

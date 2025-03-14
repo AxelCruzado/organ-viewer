@@ -8,10 +8,8 @@ import { Organo } from '../../models/organo.model';
   providedIn: 'root',
 })
 export class OrganosService {
-  private firestore: Firestore = inject(Firestore);
+  private firestore = inject(Firestore);
   private organosRef = collection(this.firestore, 'organos');
-
-  constructor() {}
 
   // Obtener órganos por categoría
   getOrganosByCategoria(categoriaId: string): Observable<Organo[]> {
