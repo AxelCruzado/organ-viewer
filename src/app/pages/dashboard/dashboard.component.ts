@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   // Variables para el modal de órgano
   nombreOrgano = '';
   descripcionOrgano = '';
+  descripcionOrganoLargo = '';
   imagenOrgano: File | null = null;
   archivoOrgano: File | null = null;
   categoriaSeleccionada: string | null = null;
@@ -92,6 +93,7 @@ export class DashboardComponent implements OnInit {
     this.categoriaSeleccionada = null;
     this.nombreOrgano = '';
     this.descripcionOrgano = '';
+    this.descripcionOrganoLargo = '';
     this.imagenOrgano = null;
     this.archivoOrgano = null;
   }
@@ -125,6 +127,7 @@ export class DashboardComponent implements OnInit {
     if (
       !this.nombreOrgano ||
       !this.descripcionOrgano ||
+      !this.descripcionOrganoLargo ||
       !this.categoriaSeleccionada ||
       !this.imagenOrgano || // Validar que la imagen no sea null
       !this.archivoOrgano // Validar que el archivo no sea null
@@ -159,6 +162,7 @@ export class DashboardComponent implements OnInit {
         id: '', // Firestore asignará un ID automáticamente
         nombre: this.nombreOrgano,
         descripcion: this.descripcionOrgano,
+        descripcionLarga: this.descripcionOrganoLargo,
         imagen: imagenUrl, // Guardar la URL de la imagen
         archivo: archivoUrl, // Guardar la URL del archivo
         categoriaId: this.categoriaSeleccionada,

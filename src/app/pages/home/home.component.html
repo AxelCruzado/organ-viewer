@@ -14,15 +14,15 @@
     </h1>
     <p class="mt-3 text-mint-950 md:text-xl font-bold">
       Explora los órganos humanos y su funcionamiento, ¡descubre más sobre el
-      cuerpo humano!
+      cuegoo humano!
     </p>
   </div>
 </div>
 
 <!-- Sección de Categorías -->
 <div class="container mx-auto mt-12 px-4">
-  <h2 class="text-3xl font-semibold text-center mb-8">Categorías</h2>
-  <div class="flex flex-wrap gap-4 justify-center">
+  <h2 class="text-3xl font-semibold text-center mb-8 text-blue-500">Categorías</h2>
+  <div class="flex flex-wrap gap-4 justify-center ">
     <button
       *ngFor="let categoria of categorias"
       (click)="filtrarPorCategoria(categoria.id)"
@@ -38,13 +38,13 @@
 </div>
 
 <!-- Sección de Órganos -->
-<div class="container mx-auto mt-10 px-4">
-  <h2 class="text-3xl font-semibold text-center mb-6">Órganos</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <h2 class="text-3xl font-semibold text-center mb-6 text-blue-500">Órganos</h2>
   <div *ngIf="organosFiltrados.length > 0; else noOrganos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     <div
       *ngFor="let organo of organosFiltrados"
-      [routerLink]="['/organo', organo.id]"
-      class="border p-6 rounded-lg shadow-lg bg-white hover:shadow-xl transition duration-300 ease-in-out cursor-pointer"
+      (click)="abrirModal(organo)"
+      class="border p-6 rounded-lg shadow-lg bg-white hover:shadow-xl transition duration-300 ease-in-out cursor-pointer hover:shadow-2xl transition duration-300 transform hover:scale-105"
     >
       <img
         [src]="organo.imagen"
@@ -60,6 +60,28 @@
   </ng-template>
 </div>
 
+<!-- Modal -->
+<div *ngIf="organoSeleccionado" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all scale-95 sm:scale-100">
+    <!-- Imagen y Botón de Cierre -->
+    <div class="relative">
+      <img [src]="organoSeleccionado.imagen" alt="{{ organoSeleccionado.nombre }}" class="w-full h-64 object-cover rounded-t-2xl" />
+      <button (click)="cerrarModal()" class="absolute top-4 right-4 bg-gray-900 bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition">
+        ✖
+      </button>
+    </div>
+    <!-- Contenido -->
+    <div class="p-6">
+      <h3 class="text-3xl font-semibold text-gray-900">{{ organoSeleccionado.nombre }}</h3>
+      <p class="mt-4 text-gray-700 leading-relaxed">{{ organoSeleccionado.descripcionLarga }}</p>
+      <button (click)="verEn3D()" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition">
+        View in 3D
+      </button>
+    </div>
+  </div>
+</div>
+
+
 <!-- Sección de Información del Proyecto -->
 <div class="container mx-auto mt-12 px-4 bg-mint-400 py-8 rounded-lg shadow-md">
   <h2 class="text-3xl font-semibold text-center mb-4">Sobre el Proyecto</h2>
@@ -72,46 +94,94 @@
 </div>
 
 <!-- Sección de Integrantes del Equipo -->
-<div class="container mx-auto mt-12 px-4">
-  <h2 class="text-3xl font-semibold text-center mb-8">Nuestro Equipo</h2>
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
-  >
-    <div class="text-center">
+<div class="container mx-auto mt-16 px-6 pb-12">
+  <h2 class="text-4xl font-bold text-center mb-12 text-blue-500">Nuestro Equipo</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 text-center">
       <img
         src=""
         alt="Integrante 1"
-        class="w-32 h-32 object-cover rounded-full mx-auto mb-4"
+        class="w-32 h-32 object-cover rounded-full mx-auto border-4 border-blue-500"
       />
-      <h3 class="text-xl font-semibold">Rojas Rojas Leonardo</h3>
-      <p class="text-sm text-gray-600">Desarrollador Frontend</p>
+      <h3 class="text-2xl font-semibold mt-4 text-gray-800">Rojas Rojas Leonardo</h3>
+      <p class="text-sm text-gray-500">Gestor de Riesgo</p>
+      <div class="mt-4">
+        <a href="#" class="text-blue-500 hover:text-blue-700 transition">Ver perfil</a>
+      </div>
     </div>
-    <div class="text-center">
+
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 text-center">
       <img
-        src=""
+        src="../../assets/image/Aron Segura.jpg"
         alt="Integrante 2"
-        class="w-32 h-32 object-cover rounded-full mx-auto mb-4"
+        class="w-32 h-32 object-cover rounded-full mx-auto border-4 border-purple-500"
       />
-      <h3 class="text-xl font-semibold">Segura Venturo Williams</h3>
-      <p class="text-sm text-gray-600">Diseñador UI/UX</p>
+      <h3 class="text-2xl font-semibold mt-4 text-gray-800">Segura Venturo Williams</h3>
+      <p class="text-sm text-gray-500">Gestor Financiero</p>
+      <div class="mt-4">
+        <a href="#" class="text-purple-500 hover:text-purple-700 transition">Ver perfil</a>
+      </div>
     </div>
-    <div class="text-center">
+
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 text-center">
       <img
-        src=""
+        src="https://scontent-lim1-1.xx.fbcdn.net/v/t1.6435-9/178129900_5509789949092040_6012940577817942122_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeH5YY0JrKocrIS8uPjrR_a8H-6mF5LDRG4f7qYXksNEbqGxD8EIU4HXNOJz1hggOdICU2nUcL_9m3RtPU0MoMQ3&_nc_ohc=S93uVQIwuRcQ7kNvgG-cvUZ&_nc_oc=AdjFIvb4JuJRgLGeihLZj6EogR840luRAfC-eFfkcC_sn7w2ILnF2A2OLjMamGghd4SZGLuYRFBuBlPRriuBqAfM&_nc_zt=23&_nc_ht=scontent-lim1-1.xx&_nc_gid=A6DF0UHtlyIEamWFeWNr2fb&oh=00_AYFDUKgW1sD9yReg6mVIV5D1GgioGrbpH5EGGEwqWVnmqA&oe=67FB3ECA"
         alt="Integrante 3"
-        class="w-32 h-32 object-cover rounded-full mx-auto mb-4"
+        class="w-32 h-32 object-cover rounded-full mx-auto border-4 border-green-500"
       />
-      <h3 class="text-xl font-semibold">Cruzado Alegre Antony</h3>
-      <p class="text-sm text-gray-600">Desarrollador Backend</p>
+      <h3 class="text-2xl font-semibold mt-4 text-gray-800">Cruzado Alegre Axel</h3>
+      <p class="text-sm text-gray-500">Desarrollador Full Stack</p>
+      <div class="mt-4">
+        <a href="#" class="text-green-500 hover:text-green-700 transition">Ver perfil</a>
+      </div>
     </div>
-    <div class="text-center">
+
+    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition duration-300 text-center">
       <img
         src=""
         alt="Integrante 4"
-        class="w-32 h-32 object-cover rounded-full mx-auto mb-4"
+        class="w-32 h-32 object-cover rounded-full mx-auto border-4 border-red-500"
       />
-      <h3 class="text-xl font-semibold">Avalos Chong Sohell</h3>
-      <p class="text-sm text-gray-600">Gestora de Proyecto</p>
+      <h3 class="text-2xl font-semibold mt-4 text-gray-800">Avalos Chong Sohell</h3>
+      <p class="text-sm text-gray-500">Gestor de Proyecto</p>
+      <div class="mt-4">
+        <a href="#" class="text-red-500 hover:text-red-700 transition">Ver perfil</a>
+      </div>
     </div>
   </div>
 </div>
+
+
+<!-- Pie de página -->
+<footer class="bg-gray-900 text-white py-12 border-t border-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+              <h3 class="text-lg font-semibold mb-4">Contact</h3>
+              <p>Email: info&#64;organviewer.com</p>
+              <p>Phone: (555) 123-4567</p>
+          </div>
+          <div>
+              <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+              <div class="flex space-x-4">
+                <a href="#" class="text-white hover:text-blue-500"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white hover:text-blue-500"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white hover:text-blue-500"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white hover:text-blue-500"><i class="fab fa-linkedin-in"></i></a>
+              </div>
+          </div>
+          <div>
+              <h3 class="text-lg font-semibold mb-4">Search</h3>
+              <div class="flex">
+                  <input type="text" placeholder="Search organs..." class="px-4 py-2 rounded-l-md w-full text-gray-900">
+                  <button class="bg-blue-500 px-4 rounded-r-md hover:bg-blue-600">🔍</button>
+              </div>
+          </div>
+          <div>
+              <h3 class="text-lg font-semibold mb-4">Credits</h3>
+              <p>© 2024 Organ Viewer</p>
+              <p>All rights reserved</p>
+          </div>
+      </div>
+  </div>
+</footer>

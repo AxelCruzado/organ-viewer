@@ -154,6 +154,11 @@
       class="w-full border rounded-lg p-2 mb-2"
       placeholder="Descripción"
     ></textarea>
+    <textarea
+      [(ngModel)]="descripcionOrganoLargo"
+      class="w-full border rounded-lg p-2 mb-2"
+      placeholder="Descripción Larga"
+    ></textarea>
     <input
       type="file"
       (change)="onFileChange($event, 'imagen')"
